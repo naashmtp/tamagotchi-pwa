@@ -1,5 +1,5 @@
-import { PetState } from './pet'
-import { SpeciesDefinition } from './species'
+import type { PetState } from './pet'
+import type { SpeciesDefinition } from './species'
 
 function clamp(value: number): number {
   return Math.min(100, Math.max(0, value))

@@ -1,4 +1,4 @@
-import { Mood, SpeciesId } from '../../core/pet'
+import type { Mood, SpeciesId } from '../../core/pet'
 import { SPECIES } from '../../core/species'
 import './PetSprite.css'
 

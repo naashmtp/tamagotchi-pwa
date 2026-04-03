@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { PetState, Mood } from '../core/pet'
+import type { PetState, Mood } from '../core/pet'
 import { feedPet, giveDrink, playWithPet, hugPet, putToSleep, wakeUp } from '../core/events'
 import { applyDecay, computeDeltaMinutes } from '../core/timers'
 import { deriveMood } from '../core/mood'

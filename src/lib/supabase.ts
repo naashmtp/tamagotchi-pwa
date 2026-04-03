@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { PetState } from '../core/pet'
+import type { PetState } from '../core/pet'
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL as string,

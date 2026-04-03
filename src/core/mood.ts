@@ -1,4 +1,4 @@
-import { PetState, Mood } from './pet'
+import type { PetState, Mood } from './pet'
 
 function getActiveStats(state: PetState): number[] {
   return [

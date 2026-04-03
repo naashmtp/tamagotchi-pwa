@@ -1,4 +1,4 @@
-import { PetState, SpeciesId } from './pet'
+import type { PetState, SpeciesId } from './pet'
 
 export interface LoreEntry {
   chapterIndex: number

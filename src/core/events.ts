@@ -1,4 +1,4 @@
-import { PetState, EvolutionStage } from './pet'
+import type { PetState, EvolutionStage } from './pet'
 
 const XP_PER_LEVEL = 100
 

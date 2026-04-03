@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Session } from '@supabase/supabase-js'
+import type { Session } from '@supabase/supabase-js'
 import { supabase, loadPet, loadLoreUnlocks } from './lib/supabase'
 import { usePetStore } from './store/petStore'
 import { Auth } from './screens/Auth/Auth'

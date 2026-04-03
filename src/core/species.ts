@@ -1,4 +1,4 @@
-import { SpeciesId } from './pet'
+import type { SpeciesId } from './pet'
 
 export interface DecayRates {
   thirst: number

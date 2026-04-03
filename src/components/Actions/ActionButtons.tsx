@@ -1,4 +1,4 @@
-import { PetAction } from '../../store/petStore'
+import type { PetAction } from '../../store/petStore'
 import './ActionButtons.css'
 
 interface Props {
