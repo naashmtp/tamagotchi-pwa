@@ -1,7 +1,7 @@
+import { generateSweetSpots, type SweetSpots } from './sweetSpots'
+
 export type SpeciesId = 'slime' | 'ghost' | 'dragon' | 'fairy' | 'golem'
-
 export type Mood = 'happy' | 'neutral' | 'sad' | 'sick' | 'sleeping' | 'bored'
-
 export type EvolutionStage = 0 | 1 | 2 | 3
 
 export interface PetState {
@@ -11,29 +11,27 @@ export interface PetState {
   species: SpeciesId
   createdAt: string
 
-  // Stats universelles (0-100)
   thirst: number
   happiness: number
   energy: number
 
-  // Stats conditionnelles par espèce (null si non applicable)
-  hunger: number | null   // null pour ghost
-  fear: number | null     // ghost uniquement
-  fire: number | null     // dragon uniquement
-  magic: number | null    // fairy uniquement
+  hunger: number | null
+  fear: number | null
+  fire: number | null
+  magic: number | null
 
-  // Progression RPG
   level: number
   xp: number
   age: number
   evolutionStage: EvolutionStage
 
-  // État
   mood: Mood
   isAsleep: boolean
   activeLoreChapter: number
   lastSyncedAt: string
   lastInteractionAt: string
+
+  sweetSpots: SweetSpots
 }
 
 export function createPet(userId: string, name: string, species: SpeciesId): PetState {
@@ -60,9 +58,10 @@ export function createPet(userId: string, name: string, species: SpeciesId): Pet
     activeLoreChapter: 0,
     lastSyncedAt: now,
     lastInteractionAt: now,
+    sweetSpots: generateSweetSpots(species),
   }
   if (species === 'ghost') return { ...base, fear: 80 }
   if (species === 'dragon') return { ...base, hunger: 80, fire: 80 }
   if (species === 'fairy') return { ...base, hunger: 80, magic: 80 }
-  return { ...base, hunger: 80 } // slime, golem
+  return { ...base, hunger: 80 }
 }
