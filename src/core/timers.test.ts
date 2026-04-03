@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { applyDecay, computeDeltaMinutes } from './timers'
 import { createPet } from './pet'
-import { SPECIES } from './species'
+import { SPECIES, getSpecies } from './species'
 
 describe('computeDeltaMinutes', () => {
   it('computes correct delta', () => {
@@ -45,5 +45,26 @@ describe('applyDecay', () => {
     const past = new Date(Date.now() - 5000).toISOString()
     const p = { ...createPet('u1', 'T', 'slime'), lastSyncedAt: past }
     expect(applyDecay(p, SPECIES.slime, 5).lastSyncedAt).not.toBe(past)
+  })
+})
+
+describe('sweet spot passive bonus', () => {
+  it('adds happiness when a stat is in sweet spot', () => {
+    const pet = createPet('u', 'T', 'slime')
+    const forcedSpot = { min: 70, max: 90, discovered: true, hitsInZone: 5 }
+    const petWithSpot = { ...pet, thirst: 80, sweetSpots: { thirst: forcedSpot } }
+    const species = getSpecies('slime')
+    const after = applyDecay(petWithSpot, species, 1)
+    // With 1 stat in sweet spot: +0.15 happiness bonus, minus normal decay ~0.2/min
+    expect(after.happiness).toBeGreaterThan(petWithSpot.happiness - 0.2)
+  })
+
+  it('records sweet spot hit and increments hitsInZone', () => {
+    const pet = createPet('u', 'T', 'slime')
+    const forcedSpot = { min: 70, max: 90, discovered: false, hitsInZone: 0 }
+    const petWithSpot = { ...pet, thirst: 80, sweetSpots: { thirst: forcedSpot } }
+    const species = getSpecies('slime')
+    const after = applyDecay(petWithSpot, species, 1)
+    expect(after.sweetSpots.thirst!.hitsInZone).toBe(1)
   })
 })
