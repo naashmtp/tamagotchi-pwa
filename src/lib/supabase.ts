@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
-import type { PetState } from '../core/pet'
+import type { PetState, SpeciesId } from '../core/pet'
+import type { SweetSpots } from '../core/sweetSpots'
+import { generateSweetSpots } from '../core/sweetSpots'
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL as string,
@@ -29,6 +31,7 @@ function petToRow(pet: PetState): Record<string, unknown> {
     active_lore_chapter: pet.activeLoreChapter,
     last_synced_at: pet.lastSyncedAt,
     last_interaction_at: pet.lastInteractionAt,
+    sweet_spots: pet.sweetSpots ?? null,
   }
 }
 
@@ -55,6 +58,7 @@ function rowToPet(row: Record<string, unknown>): PetState {
     activeLoreChapter: row.active_lore_chapter as number,
     lastSyncedAt: row.last_synced_at as string,
     lastInteractionAt: row.last_interaction_at as string,
+    sweetSpots: (row.sweet_spots as SweetSpots) ?? generateSweetSpots(row.species as SpeciesId),
   }
 }
 
@@ -70,8 +74,8 @@ export async function loadPet(userId: string): Promise<PetState | null> {
     .from('pets')
     .select('*')
     .eq('user_id', userId)
-    .single()
-  if (error || !data) return null
+    .maybeSingle()
+  if (!data) return null
   return rowToPet(data as Record<string, unknown>)
 }
 
