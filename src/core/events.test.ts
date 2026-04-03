@@ -63,6 +63,51 @@ describe('putToSleep / wakeUp', () => {
   })
 })
 
+describe('secondary costs', () => {
+  it('feedPet drains thirst and energy', () => {
+    const p = pet()
+    const after = feedPet(p)
+    expect(after.thirst).toBeLessThan(p.thirst)
+    expect(after.energy).toBeLessThan(p.energy)
+  })
+
+  it('feedPet gives diminishing return when hunger > 90', () => {
+    const p = pet({ hunger: 92 })
+    const after = feedPet(p)
+    expect(after.hunger! - 92).toBeLessThanOrEqual(5)
+  })
+
+  it('giveDrink gives small energy boost', () => {
+    const p = pet()
+    const after = giveDrink(p)
+    expect(after.energy).toBeGreaterThan(p.energy)
+  })
+
+  it('playWithPet drains hunger thirst energy', () => {
+    const p = pet()
+    const after = playWithPet(p)
+    expect(after.hunger!).toBeLessThan(p.hunger!)
+    expect(after.thirst).toBeLessThan(p.thirst)
+    expect(after.energy).toBeLessThan(p.energy)
+  })
+
+  it('playWithPet gives less happiness when exhausted (energy < 20)', () => {
+    const petNormal = pet()
+    const petTired = pet({ energy: 15 })
+    const normalResult = playWithPet(petNormal)
+    const tiredResult = playWithPet(petTired)
+    expect(normalResult.happiness - petNormal.happiness).toBeGreaterThan(
+      tiredResult.happiness - petTired.happiness
+    )
+  })
+
+  it('hugPet drains energy slightly', () => {
+    const p = pet()
+    const after = hugPet(p)
+    expect(after.energy).toBeLessThan(p.energy)
+  })
+})
+
 describe('gainXP', () => {
   it('levels up when XP reaches 100', () => {
     const leveled = gainXP(pet({ xp: 95 }), 10)
