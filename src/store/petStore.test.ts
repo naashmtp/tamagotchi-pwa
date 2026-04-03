@@ -8,6 +8,8 @@ beforeEach(() => {
     pet: null,
     loreUnlocks: [],
     lastInteractionAt: new Date().toISOString(),
+    consecutiveHugs: 0,
+    lastHugAt: null,
   })
 })
 
@@ -42,5 +44,34 @@ describe('petStore', () => {
     act(() => usePetStore.getState().unlockLore(1))
     act(() => usePetStore.getState().unlockLore(1))
     expect(usePetStore.getState().loreUnlocks).toHaveLength(1)
+  })
+})
+
+describe('performAction returns ActionResult', () => {
+  it('returns action name and xpGained', () => {
+    usePetStore.setState({ pet: createPet('u', 'T', 'slime'), loreUnlocks: [], consecutiveHugs: 0, lastHugAt: null })
+    const result = usePetStore.getState().performAction('drink')
+    expect(result.action).toBe('drink')
+    expect(result.xpGained).toBeGreaterThan(0)
+  })
+
+  it('returns hugSaturated true after 3 quick hugs', () => {
+    usePetStore.setState({ pet: createPet('u', 'T', 'slime'), loreUnlocks: [], consecutiveHugs: 3, lastHugAt: new Date().toISOString() })
+    const result = usePetStore.getState().performAction('hug')
+    expect(result.hugSaturated).toBe(true)
+  })
+
+  it('does not change pet on saturated hug', () => {
+    const pet = createPet('u', 'T', 'slime')
+    usePetStore.setState({ pet, loreUnlocks: [], consecutiveHugs: 3, lastHugAt: new Date().toISOString() })
+    usePetStore.getState().performAction('hug')
+    expect(usePetStore.getState().pet?.happiness).toBe(pet.happiness)
+  })
+
+  it('detects overindulgence on overfed', () => {
+    const pet = { ...createPet('u', 'T', 'slime'), hunger: 92 }
+    usePetStore.setState({ pet, loreUnlocks: [], consecutiveHugs: 0, lastHugAt: null })
+    const result = usePetStore.getState().performAction('feed')
+    expect(result.overindulgence).toBe(true)
   })
 })
