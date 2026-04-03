@@ -1,7 +1,7 @@
 import { generateSweetSpots, type SweetSpots } from './sweetSpots'
 
 export type SpeciesId = 'slime' | 'ghost' | 'dragon' | 'fairy' | 'golem'
-export type Mood = 'happy' | 'neutral' | 'sad' | 'sick' | 'sleeping' | 'bored'
+export type Mood = 'happy' | 'neutral' | 'sad' | 'sick' | 'sleeping' | 'bored' | 'dead'
 export type EvolutionStage = 0 | 1 | 2 | 3
 
 export interface PetState {
