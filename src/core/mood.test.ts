@@ -40,6 +40,11 @@ describe('deriveMood', () => {
     expect(deriveMood(makeState({ happiness: 65 }), minutesAgo(1))).toBe('neutral')
   })
 
+  it('returns sick when hunger > 95', () => {
+    const p = { ...createPet('u', 'T', 'slime'), hunger: 96 }
+    expect(deriveMood(p, minutesAgo(1))).toBe('sick')
+  })
+
   it('sleeping takes priority over sick', () => {
     expect(deriveMood(makeState({ isAsleep: true, happiness: 10 }), minutesAgo(1))).toBe('sleeping')
   })

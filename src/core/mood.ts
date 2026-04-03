@@ -14,6 +14,7 @@ function getActiveStats(state: PetState): number[] {
 
 export function deriveMood(state: PetState, lastInteractionAt: string): Mood {
   if (state.isAsleep) return 'sleeping'
+  if (state.hunger !== null && state.hunger > 95) return 'sick'
 
   const stats = getActiveStats(state)
   if (stats.some((v) => v < 20)) return 'sick'
